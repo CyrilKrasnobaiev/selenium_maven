@@ -8,8 +8,8 @@ public class EmailValidationData{
     public Object[][] incorrectEmailsData() {
         return new Object[][]{
                 {"2@e.e"},
-//                {"erwerwer"},
-//                {"434534534@f"}
+                {"erwerwer"},
+                {"434534534@f"}
         };
     }
 }
