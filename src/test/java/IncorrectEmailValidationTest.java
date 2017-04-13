@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 /**
@@ -27,10 +27,10 @@ public class IncorrectEmailValidationTest extends BasicTest {
     public void neededPageTest() {
         driver.get("https://templatemonster.com");
         driver.findElement(By.id("header-signin-link")).click();
-        ArrayList<String> tab2 = new ArrayList<String>(driver.getWindowHandles());
+        List<String> tab2 = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tab2.get(1));
         Wait<WebDriver> wait = new WebDriverWait(driver, 5, 1000);
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("id-index-continue-button"))));
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("id-general-facebook-button"))));
     }
 
 
@@ -38,13 +38,13 @@ public class IncorrectEmailValidationTest extends BasicTest {
     public void emailValidationTest(String invalidEmail) {
         try {
             Wait<WebDriver> wait = new WebDriverWait(driver, 5, 1000);
-            wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//input[@type='email']"))));
+            wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//input[@type='email']")));
             WebElement emailField = driver.findElement(By.xpath("//input[@type='email']"));
             emailField.clear();
             emailField.sendKeys(invalidEmail);
             driver.findElement(By.id("id-index-continue-button")).click();
-            wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div/span[.='Please specify a valid email']"))));
-            WebElement errorMessage = driver.findElement(By.xpath("//div/span[.='Please specify a valid email']"));
+            wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[contains(@class, 'notification__text')]")));
+            WebElement errorMessage = driver.findElement(By.xpath("//*[contains(@class, 'notification__text')]"));
             String compareErrorMessage = errorMessage.getText();
 
             if (compareErrorMessage.equals("Please specify a valid email")) {
@@ -53,11 +53,11 @@ public class IncorrectEmailValidationTest extends BasicTest {
             else {
                 System.out.println(compareErrorMessage);
             }
-            emailField.clear();
         }
         catch (StaleElementReferenceException e) {
             System.out.println(" ");
         }
+
     }
 }
 
