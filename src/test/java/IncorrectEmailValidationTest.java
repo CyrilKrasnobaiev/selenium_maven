@@ -19,7 +19,7 @@ public class IncorrectEmailValidationTest extends BasicTest {
 
     @BeforeClass
     void beforeClass() {
-        //System.setProperty("webdriver.chrome.driver", "C:/work/chromedriver_win32/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:/work/chromedriver_win32/chromedriver.exe");
         driver = new ChromeDriver();
         }
 
@@ -27,8 +27,10 @@ public class IncorrectEmailValidationTest extends BasicTest {
     public void neededPageTest() {
         driver.get("https://templatemonster.com");
         driver.findElement(By.id("header-signin-link")).click();
-        List<String> tab2 = new ArrayList<String>(driver.getWindowHandles());
-        driver.switchTo().window(tab2.get(1));
+
+        List<String> tab = new ArrayList<String>(driver.getWindowHandles());
+        driver.switchTo().window(tab.get(1));
+
         Wait<WebDriver> wait = new WebDriverWait(driver, 5, 1000);
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("id-general-facebook-button"))));
     }
@@ -39,11 +41,15 @@ public class IncorrectEmailValidationTest extends BasicTest {
         try {
             Wait<WebDriver> wait = new WebDriverWait(driver, 5, 1000);
             wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//input[@type='email']")));
+
             WebElement emailField = driver.findElement(By.xpath("//input[@type='email']"));
             emailField.clear();
             emailField.sendKeys(invalidEmail);
+
             driver.findElement(By.id("id-index-continue-button")).click();
+
             wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[contains(@class, 'notification__text')]")));
+
             WebElement errorMessage = driver.findElement(By.xpath("//*[contains(@class, 'notification__text')]"));
             String compareErrorMessage = errorMessage.getText();
 
@@ -57,7 +63,6 @@ public class IncorrectEmailValidationTest extends BasicTest {
         catch (StaleElementReferenceException e) {
             System.out.println(" ");
         }
-
     }
 }
 
